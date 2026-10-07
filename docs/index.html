@@ -279,6 +279,13 @@
             background: rgba(107, 76, 154, 0.14) !important;
         }
 
+        /* Part of a composite primary key AND a foreign key */
+        .pkfk {
+            background: rgba(44, 86, 151, 0.14) !important;
+            font-weight: 700;
+            box-shadow: inset 0 0 0 2px rgba(107, 76, 154, 0.55);
+        }
+
         .problem {
             background: rgba(180, 83, 9, 0.16) !important;
         }
@@ -558,6 +565,7 @@
 
         .legend-pk      { background: rgba(44, 86, 151, 0.25); border: 2px solid var(--c-key); }
         .legend-fk      { background: rgba(107, 76, 154, 0.25); border: 2px solid var(--c-fk); }
+        .legend-pkfk    { background: rgba(44, 86, 151, 0.25); border: 2px solid var(--c-fk); }
         .legend-problem { background: rgba(180, 83, 9, 0.25); border: 2px solid var(--c-problem); }
 
         /* Responsive */
@@ -900,6 +908,7 @@
                     <div class="legend">
                         <div class="legend-item"><div class="legend-color legend-pk"></div> Primary Key</div>
                         <div class="legend-item"><div class="legend-color legend-fk"></div> Foreign Key</div>
+                        <div class="legend-item"><div class="legend-color legend-pkfk"></div> Primary + Foreign Key (part of composite key)</div>
                     </div>
                     <div class="split-container">
                         <div class="table-wrapper slide-in-left">
@@ -939,11 +948,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td class="fk">100</td><td class="pk">1</td><td>10</td><td>iPhone</td><td>1000</td></tr>
-                                    <tr><td class="fk">100</td><td class="pk">2</td><td>20</td><td>iPad</td><td>500</td></tr>
-                                    <tr><td class="fk">200</td><td class="pk">1</td><td>30</td><td>Macbook</td><td>2000</td></tr>
-                                    <tr><td class="fk">300</td><td class="pk">1</td><td>10</td><td>iPhone</td><td>1000</td></tr>
-                                    <tr><td class="fk">300</td><td class="pk">2</td><td>30</td><td>Macbook</td><td>2000</td></tr>
+                                    <tr><td class="pkfk">100</td><td class="pk">1</td><td>10</td><td>iPhone</td><td>1000</td></tr>
+                                    <tr><td class="pkfk">100</td><td class="pk">2</td><td>20</td><td>iPad</td><td>500</td></tr>
+                                    <tr><td class="pkfk">200</td><td class="pk">1</td><td>30</td><td>Macbook</td><td>2000</td></tr>
+                                    <tr><td class="pkfk">300</td><td class="pk">1</td><td>10</td><td>iPhone</td><td>1000</td></tr>
+                                    <tr><td class="pkfk">300</td><td class="pk">2</td><td>30</td><td>Macbook</td><td>2000</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1047,6 +1056,7 @@
                     <div class="legend">
                         <div class="legend-item"><div class="legend-color legend-pk"></div> Primary Key</div>
                         <div class="legend-item"><div class="legend-color legend-fk"></div> Foreign Key</div>
+                        <div class="legend-item"><div class="legend-color legend-pkfk"></div> Primary + Foreign Key (part of composite key)</div>
                     </div>
                     <div class="final-schema">
                         <div class="schema-row">
@@ -1093,11 +1103,11 @@
                                         <tr><th>OrderID</th><th>LineNumber</th><th>ItemID</th></tr>
                                     </thead>
                                     <tbody>
-                                        <tr><td class="fk">100</td><td class="pk">1</td><td class="fk">10</td></tr>
-                                        <tr><td class="fk">100</td><td class="pk">2</td><td class="fk">20</td></tr>
-                                        <tr><td class="fk">200</td><td class="pk">1</td><td class="fk">30</td></tr>
-                                        <tr><td class="fk">300</td><td class="pk">1</td><td class="fk">10</td></tr>
-                                        <tr><td class="fk">300</td><td class="pk">2</td><td class="fk">30</td></tr>
+                                        <tr><td class="pkfk">100</td><td class="pk">1</td><td class="fk">10</td></tr>
+                                        <tr><td class="pkfk">100</td><td class="pk">2</td><td class="fk">20</td></tr>
+                                        <tr><td class="pkfk">200</td><td class="pk">1</td><td class="fk">30</td></tr>
+                                        <tr><td class="pkfk">300</td><td class="pk">1</td><td class="fk">10</td></tr>
+                                        <tr><td class="pkfk">300</td><td class="pk">2</td><td class="fk">30</td></tr>
                                     </tbody>
                                 </table>
                             </div>

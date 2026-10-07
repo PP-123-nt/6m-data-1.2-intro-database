@@ -32,6 +32,7 @@ Cells and legends in the tables use these colours:
 
 - **Blue**: Primary Key
 - **Purple**: Foreign Key
+- **Blue with purple outline**: a column that is both part of a composite Primary Key and a Foreign Key (e.g. OrderID in Order Line Items)
 - **Amber**: Problem areas (duplicates, partial or transitive dependencies)
 - **Red tint**: Repeated data in the Update Anomaly example (step 1)
 - **Green**: Successfully normalized tables (step 8)
