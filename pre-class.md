@@ -1,7 +1,7 @@
 # 📚 Pre-Class: Intro to Database
 
 **Estimated Time:** 30–45 minutes
-**Prerequisites:** Lesson 1.1 — The Data Landscape
+**Prerequisites:** Lesson 1.1 — Introduction to Data Science
 
 > In Lesson 1.1 you learned what Data Analytics, Data Science, and AI are. This lesson goes one level deeper: before data can be analysed, it needs to be *stored* somewhere. This pre-class reading introduces how databases are structured and why the design decisions matter.
 

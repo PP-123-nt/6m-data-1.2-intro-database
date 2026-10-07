@@ -8,8 +8,8 @@
 
 | Section | Duration | Topic / Activity |
 |---------|----------|-----------------|
-| **Part 1: The Data Landscape** | 50 min | Relational vs. NoSQL vs. Vector Databases; SQL Data Types |
-| **Part 2: Building the Blueprint** | 50 min | Primary & Foreign Keys; Entity-Relationship Diagrams (ERD) |
+| **Part 1: The Data Landscape** | 50 min | Relational vs. NoSQL vs. Vector Databases |
+| **Part 2: Building the Blueprint** | 50 min | Primary & Foreign Keys; Entity-Relationship Diagrams (ERD); SQL Data Types |
 | **Part 3: Organising Data** | 50 min | Database Normalisation — 1NF, 2NF, and 3NF |
 
 *(Plus two 10-min breaks between parts — see [Lesson Plan](./lesson.md) for the full agenda, totalling 3 hours.)*
@@ -35,6 +35,7 @@ By the end of this lesson, you will be able to:
 | [Lesson Plan](./lesson.md) | Instructor guide for the 3-hour flipped classroom session | 3 hours |
 | [Assignment](./assignment.md) | FoodFast Database Design Challenge | 45–60 min |
 | [Reference](./reference.md) | DBML syntax, ERD notation, and normalisation cheat sheet | As needed |
+| [Normalisation Interactive Tutorial](https://su-ntu-ctp.github.io/6m-data-1.2-intro-database/) | 8-step visual walkthrough of 1NF, 2NF, and 3NF (source: [docs/](./docs/)) | 10 min |
 
 ---
 

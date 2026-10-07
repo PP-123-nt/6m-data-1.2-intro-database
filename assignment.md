@@ -190,17 +190,17 @@ Ref: order_items.menu_item_id > menu_items.id
 You’ve normalised the FoodFast schema. But real-world databases aren’t always fully normalised — and for good reason. Work through the two scenarios below, think about your answer, then open the explanation.
 
 **Scenario 1 – Historical Accuracy:**
-Imagine the iPhone’s price increases to $1,200 next year. If your `order_line_items` table only stores a FK to `menu_items` (not the actual price paid), what happens when you try to calculate last year’s revenue?
+Imagine the Big Mac’s price increases from $5.00 to $6.00 next year. If your `order_items` table only stores a FK to `menu_items` (not the actual price paid), what happens when you try to calculate last year’s revenue?
 
 **Scenario 2 – Query Complexity:**
-Assuming you *did* store historical prices in `order_line_items`, how many table joins would you need to answer "Total revenue by product last year"? What might that mean for a database with millions of rows?
+Assuming you *did* store historical prices in `order_items`, how many table joins would you need to answer "Total revenue by product last year"? What might that mean for a database with millions of rows?
 
 Understand the trade-offs of full normalisation:
 
 <details>
 <summary>Scenario 1 answer — What happens to last year’s revenue?</summary>
 
-Your query joins `orders → order_line_items → menu_items` to get the price. But `menu_items.current_price` is now $1,200. The join returns $1,200 for every iPhone sold last year — even though customers actually paid $1,000. **Your revenue report is now wrong, and historic receipts are inaccurate.** This is why we added `price_at_purchase` to `order_items` in Challenge 2: transactions must snapshot the price at the moment of purchase, not reference a live price that can change.
+Your query joins `orders → order_items → menu_items` to get the price. But `menu_items.current_price` is now $6.00. The join returns $6.00 for every Big Mac sold last year — even though customers actually paid $5.00. **Your revenue report is now wrong, and historic receipts are inaccurate.** This is why we added `price_at_purchase` to `order_items` in Challenge 2: transactions must snapshot the price at the moment of purchase, not reference a live price that can change.
 
 Fully normalised tables store each fact in exactly one place, which is great for avoiding duplicates — but “current price” and “price paid” are two different facts that both deserve their own column.
 
@@ -211,7 +211,7 @@ Fully normalised tables store each fact in exactly one place, which is great for
 
 To answer “total revenue by product last year” you’d need something like:
 
-`orders → order_line_items → menu_items`
+`orders → order_items → menu_items`
 
 That’s 3 tables joined. As your database grows to millions of rows, every join multiplies the work the database has to do. This is manageable for transactional queries (looking up one order), but slow for analytical queries that scan entire tables.
 

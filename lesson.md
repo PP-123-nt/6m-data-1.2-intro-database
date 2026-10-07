@@ -119,6 +119,7 @@ Open [dbdiagram.io](https://dbdiagram.io/d) and paste the following code. Read t
 > | `INT` | Whole number (e.g., age, quantity) |
 > | `VARCHAR` | Short text with variable length (e.g., name, email) |
 > | `TEXT` | Long text (e.g., description, notes) |
+> | `DECIMAL` | Number with decimal places (e.g., price, rating) |
 > | `DATE` | Calendar date (e.g., 2026-01-01) |
 > | `DATETIME` | Date + time (e.g., 2026-01-01 09:30:00) |
 > | `BOOLEAN` | True or false |
@@ -149,8 +150,8 @@ Table cars {
 }
 
 // --- 3. Define the Link (Relationship) ---
-// The '>' symbol translates to "One-to-Many".
-// Read as: "One Customer can have Many Cars"
+// The '>' symbol means "many-to-one": many cars point to one customer.
+// Read from the other side as: "One Customer can have Many Cars"
 Ref: cars.customer_id > customers.id
 
 
@@ -187,7 +188,7 @@ Each entity has the following attributes:
 
 > - Student: id, name, address, phone, email, class_id
 > - Teacher: id, name, address, phone, email
-> - Class: id, name, teacher_id
+> - Class: id, name
 
 - Write the DBML to create the ERD.
 - Submit your code in the Discord Peer-Review Channel.
@@ -222,6 +223,10 @@ Table classes {
 Table class_teachers {
   class_id int    // FK → classes
   teacher_id int  // FK → teachers
+
+  indexes {
+    (class_id, teacher_id) [pk]  // composite PK: each class-teacher pairing appears only once
+  }
 }
 
 Ref: students.class_id > classes.id         // Many students belong to one class
@@ -232,7 +237,8 @@ Ref: class_teachers.teacher_id > teachers.id
 **Key design decisions:**
 - `students.class_id` is a FK to `classes` because each student belongs to exactly one class (one-to-many).
 - The `class_teachers` junction table resolves the many-to-many relationship between classes and teachers — a teacher can teach many classes, and a class can have many teachers.
-- The original spec has `class_id` as an attribute on Teacher — this works if each teacher only ever belongs to one class, but the junction table approach is more flexible and correct given the many-to-many requirement.
+- A tempting shortcut is to put a `teacher_id` column on `classes` — but that allows only one teacher per class (and one `class_id` on `teachers` would allow only one class per teacher). The junction table is the correct design given the many-to-many requirement.
+- The junction table's primary key is the *pair* `(class_id, teacher_id)`, so the same teacher can't be linked to the same class twice.
 
 </details>
 
@@ -268,7 +274,7 @@ We'll follow one story — a university **Library Borrow Log** — through all t
 
 **The Solution — After 1NF:**
 
-Splitting the list into one book per row isn't enough on its own — notice Alice's row now repeats, and `StudentID` alone can't tell those two rows apart. But we don't need to invent a new column: assuming a student only borrows a given book once at a time, the *pair* `(StudentID, BookID)` is already unique together. That pair becomes our **composite Primary Key**:
+Splitting the list into one book per row (each book now gets its own `BookID`, and we can record a `BorrowDate` for it) isn't enough on its own — notice Alice's row now repeats, and `StudentID` alone can't tell those two rows apart. But we don't need to invent a new column: assuming a student only borrows a given book once at a time, the *pair* `(StudentID, BookID)` is already unique together. That pair becomes our **composite Primary Key**:
 
 | StudentID | StudentName | BookID | BookTitle | BorrowDate |
 |-----------|-------------|--------|-----------|------------|
@@ -276,7 +282,7 @@ Splitting the list into one book per row isn't enough on its own — notice Alic
 | S01 | Alice | B20 | 1984 | 2026-01-12 |
 | S02 | Bob | B10 | Dune | 2026-01-08 |
 
-1NF is two rules, not one: **(1) atomic values** — one book per cell, no lists — **and (2) unique rows**, here guaranteed by the composite key `(StudentID, BookID)`. A table can fix rule 1 and still fail 1NF if it has no way to uniquely identify each row. *(Sometimes the existing columns aren't enough and you do need a new surrogate ID column instead — that's a design choice, not a requirement.)*
+1NF is two rules, not one: **(1) atomic values** — one book per cell, no lists — **and (2) unique rows**, here guaranteed by the composite key `(StudentID, BookID)`. A table can fix rule 1 and still fail 1NF if it has no way to uniquely identify each row. *(Sometimes the existing columns aren't enough and you do need a new surrogate ID column instead — that's a design choice, not a requirement. Also, some textbooks define 1NF as rule 1 only and treat keys separately; we teach both rules together because duplicate-able rows cause the same update problems.)*
 
 ---
 
@@ -377,7 +383,7 @@ Work through the normalization steps with your group:
 
 **Step 1 — Apply 1NF:** Add a LineNumber to create a unique two-part identifier (OrderID + LineNumber) for each row.
 
-**Step 2 — Apply 2NF:** Customer info (CustomerID, CustomerName, OrderDate) depends only on OrderID, not on LineNumber. Split into an **Orders Table** and an **Order Line Items Table**.
+**Step 2 — Apply 2NF:** Order-level info (CustomerID, CustomerName, OrderDate) depends only on OrderID, not on LineNumber. Split into an **Orders Table** and an **Order Line Items Table**.
 
 **Step 3 — Apply 3NF:** ItemName and ItemPrice depend on ItemID, not on the specific order — create a separate **Products Table**. The same problem exists for CustomerName: it depends on CustomerID, not on OrderID, so it also needs its own **Customers Table**.
 
@@ -405,9 +411,13 @@ Table orders {
 }
 
 Table order_line_items {
-  order_id int             // FK → orders (part of composite PK)
-  line_number int          // Added in Step 1 for uniqueness (part of composite PK)
+  order_id int             // FK → orders
+  line_number int          // Added in Step 1 for uniqueness
   product_id int           // FK → products
+
+  indexes {
+    (order_id, line_number) [pk]  // composite PK from Step 1
+  }
 }
 
 Ref: orders.customer_id > customers.id
@@ -417,7 +427,7 @@ Ref: order_line_items.product_id > products.id
 
 </details>
 
-### 🛠️ Activity 3.2: Your Turn to Practice (15 min)
+### 🛠️ Activity 3.2: Your Turn to Practice (15 min — set as take-home if time is short)
 
 **Scenario:** You run a Movie Rental Service.
 
@@ -435,9 +445,10 @@ Ref: order_line_items.product_id > products.id
 <summary>Click here to view a sample solution</summary>
 
 **Step 1 — Spot the violations:**
-- `CustomerName` and `CustomerPhone` depend on the customer, not on the rental → 2NF violation
-- `MovieGenre` depends on the movie, not on the rental → 2NF / 3NF violation
-- R1 has two movies — `RentalID` alone doesn't uniquely identify a row → we need a line number
+- R1 has two movies — `RentalID` alone doesn't uniquely identify a row → 1NF: add a line number to make a composite key `(RentalID, LineNumber)`
+- `CustomerName`, `CustomerPhone`, `RentalDate` and `ReturnDate` depend only on `RentalID`, not on the line number → 2NF violation (partial dependency): split rentals from line items
+- `CustomerPhone` is really a fact about the customer, not the rental (Alice's phone repeats for every rental she makes) → 3NF violation: customers get their own table
+- `MovieGenre` is a fact about the movie, not the rental → 3NF violation: movies get their own table
 
 **Step 2 — The 3NF DBML:**
 
@@ -465,6 +476,10 @@ Table rental_line_items {
   rental_id int    // FK → rentals
   line_number int  // makes each row unique within a rental
   movie_id int     // FK → movies
+
+  indexes {
+    (rental_id, line_number) [pk]  // composite PK
+  }
 }
 
 Ref: rentals.customer_id > customers.id
