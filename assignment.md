@@ -160,6 +160,8 @@ Table ORDERS_ITEMS {
   Quantity int                             // Quantity Order
 }
 ```
+<img width="472" height="267" alt="M1 2 Assignment" src="https://github.com/user-attachments/assets/b8462074-df6b-4da9-9b98-66a35b666d2e" />
+
 
 
 ## **✅ Solution Key (Don't peek until you try\!)**
