@@ -108,6 +108,59 @@ Paste the generated code for your Users table below. Try to read it, then open t
 
 * Note down 2 questions about anything else in the SQL syntax that puzzles you — you'll get answers when you work through Lesson 1.3 (DDL), which covers exactly this code.
 
+💡💡💡💡 **Answer**
+```dbml
+Table USERS {
+  ID int [pk, increment]       
+  Name varchar                 
+  Email varchar                                     
+}
+
+Table ADDRESSES {
+  ID int [pk, increment] 
+  UserID int [not null, ref: > USERS.ID]   
+  Street varchar                 
+  City varchar  
+  Type varchar                   // Home or Work                   
+}
+
+Table RESTAURANTS {
+  ID int [pk, increment]       
+  Name varchar                
+  CuisineType varchar    
+  Rating decimal             
+}
+
+Table MENU {
+  ID int [pk, increment]      
+  RestaurantID int [not null, ref: > RESTAURANTS.ID]       
+  Name varchar           
+  Price decimal                 // Purchase Price   
+}
+
+Table COURIERS {
+  ID int [pk, increment]       
+  Name varchar          
+  Vehicle varchar                   
+}
+
+Table ORDERS {
+  ID int [pk, increment]       
+  UserID int [not null, ref: > USERS.ID]       
+  RestaurantID int [not null, ref: > RESTAURANTS.ID]      
+  CourierID int [not null, ref: > COURIERS.ID]        
+  OrderTime datetime
+  TotalPrice decimal
+}
+
+Table ORDERS_ITEMS {
+  ID int [pk, increment]
+  OrderID int [not null, ref: > ORDERS.ID] // FK to ORDERS
+  MenuID int [not null, ref: > MENU.ID]    // FK to MENU
+  Quantity int                             // Quantity Order
+}
+```
+
 
 ## **✅ Solution Key (Don't peek until you try\!)**
 <details>
