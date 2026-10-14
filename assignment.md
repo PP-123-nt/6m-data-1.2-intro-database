@@ -108,7 +108,7 @@ Paste the generated code for your Users table below. Try to read it, then open t
 
 * Note down 2 questions about anything else in the SQL syntax that puzzles you — you'll get answers when you work through Lesson 1.3 (DDL), which covers exactly this code.
 
-💡💡💡💡 **Answer**
+✅✅✅ Answer
 ```dbml
 Table USERS {
   ID int [pk, increment]       
